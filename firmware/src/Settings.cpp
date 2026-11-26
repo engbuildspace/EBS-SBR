@@ -186,7 +186,7 @@ const ParamDef kParams[] = {
      "rate. Positive damps; too much buzzes or wobbles in yaw. 0 = off. Start around 0.02, then "
      "add K2.",
      [](float v) { K[5] = v; }, 0},
-    {"yawInvert", "Yaw direction flip (0/1)", "Position & heading hold", 0.0f, 0.0f, 1.0f, 1.0f, false,
+    {"yawInvert", "Yaw direction flip (0/1)", "Position & heading hold", 1.0f, 0.0f, 1.0f, 1.0f, false,
      "Matches the gyro's yaw sign to the wheels. Check it with K2 and K5 at 0: turn right with "
      "the joystick and watch 'Yaw rate' on the chart. It should go positive; if it goes negative "
      "set this to 1. With it wrong the heading hold makes the robot spin.",
