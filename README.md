@@ -128,6 +128,16 @@ pio run -e ota -t upload --upload-port balancebot-xxxxxx.local
 
 The firmware uses the `min_spiffs.csv` partition table (two ~1.9 MB app slots for OTA). Moving to it from the old `default.csv` layout needs one USB flash; saved settings (NVS) survive the change.
 
+**Boards that ran older firmware: erase the flash first.** A normal upload rewrites only the bootloader, partition table and app. Everything else in flash is left as it was, including NVS. NVS holds this firmware's settings, but also the ESP-IDF WiFi driver's own data (`nvs.net80211`) and the saved RF calibration (`phy`). Stale data there, from an older firmware or an earlier partition layout, can leave the radio working only badly. One robot showed this: its access point appeared only some of the time, and joining it failed with the phone asking for the password again. The same build ran fine on other robots, and an erase fixed it. A `Core dump data check failed` line in the boot log is another sign of old flash contents. So on a board that came from older firmware, or one that has WiFi trouble the other robots don't, run:
+
+```bash
+cd firmware
+pio run -t erase
+pio run -t upload
+```
+
+An erase also clears this robot's saved settings and gyro offsets. Export the settings from the web page first if you can, and keep the robot still on the first boot while it measures new gyro offsets. Driver node IDs and invert settings are stored on the driver boards, so an erase doesn't affect them.
+
 **Driver boards:** build and flash from the BLDC-Driver repo. All boards use the same build. Each board is then given its node ID over its USB serial console:
 
 ```bash
